@@ -22,3 +22,8 @@ output "region" {
   description = "AWS region."
   value       = var.region
 }
+
+output "ecr_repository_url" {
+  description = "AWS ECR repository's URL"
+  value = aws_ecr_repository.app_ecr.repository_url
+}
