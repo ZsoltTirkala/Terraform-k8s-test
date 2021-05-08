@@ -22,6 +22,12 @@ variable "map_accounts" {
   ]
 }
 
+variable "ecr_repository_name" {
+  description = "ECR repository's name"
+  type        = string
+  default     = "application-test-ecr"
+}
+
 variable "map_roles" {
   description = "Additional IAM roles to add to the aws-auth configmap."
   type = list(object({
