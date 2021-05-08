@@ -77,6 +77,10 @@ module "vpc" {
 
 }
 
+resource "aws_ecr_repository" "app_ecr" {
+  name = var.ecr_repository_name
+}
+
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = local.cluster_name
