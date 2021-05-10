@@ -19,6 +19,7 @@ pipeline {
             url: 'https://github.com/ZsoltTirkala/Terraform-k8s-test.git'
       }
     }
+    //terraform in WIP
     stage('Init Terraform'){
         steps {
             sh '''
