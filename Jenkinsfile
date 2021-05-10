@@ -19,15 +19,23 @@ pipeline {
             url: 'https://github.com/ZsoltTirkala/Terraform-k8s-test.git'
       }
     }
-
-    stage('Run Terraform'){
+    stage('Init Terraform'){
         steps {
             sh '''
                 cd terraform
                 terraform init
-                terraform plan -out tfplan
-                terraform appy -auto-approve tfplan
               '''
+        }
+    }
+    stage('Plan Terraform'){
+        steps {
+            sh 'terraform plan -out tfplan'
+        }
+    }
+
+    stage('Run Terraform'){
+        steps {
+            sh 'terraform appy -auto-approve tfplan'
         }
     }
 
