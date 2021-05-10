@@ -22,12 +22,12 @@ pipeline {
 
     stage('Run Terraform'){
         steps {
-            script {
+            sh '''
                 cd terraform
                 terraform init
                 terraform plan -out tfplan
                 terraform appy -auto-approve tfplan
-              }
+              '''
         }
     }
 
