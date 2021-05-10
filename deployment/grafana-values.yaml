@@ -1,0 +1,5 @@
+image:
+  repository: grafana/grafana
+  tag: latest
+service:
+  type: LoadBalancer
