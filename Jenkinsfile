@@ -9,7 +9,7 @@ pipeline {
     CREDENTIALS = 'AWS_CREDENTIALS'
     DOCKERFILE_PATH = './app/'
     GRAFANA_USERNAME="GRAFANA_USERNAME"
-    GRAFANA_PASSOWRD="GRAFANA_PASSOWRD"
+    GRAFANA_PASSWORD="GRAFANA_PASSWORD"
   }
 
 
@@ -40,13 +40,13 @@ pipeline {
         }
       }
       
-    stage('Deploy prometheus') {
-      steps {
-        sh "helm repo add prometheus-community https://prometheus-community.github.io/helm-charts"
-        sh "helm repo update"
-        sh "helm install helm-prometheus prometheus-community/prometheus --values deployment/prometheus-values.yaml"
-      }
-    }
+//    stage('Deploy prometheus') {
+//      steps {
+//        sh "helm repo add prometheus-community https://prometheus-community.github.io/helm-charts"
+//        sh "helm repo update"
+//        sh "helm install helm-prometheus prometheus-community/prometheus --values deployment/prometheus-values.yaml"
+//      }
+//    }
 
     stage('Deploy grafana') {
       steps {
