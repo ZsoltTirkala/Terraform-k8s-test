@@ -7,7 +7,7 @@ pipeline {
     ECR_REPOSITORY = 'application-test-ecr'
     VERSION = 'latest'
     CREDENTIALS = 'AWS_CREDENTIALS'
-    DOCKERFILE_PATH = './app/'
+    DOCKERFILE_PATH = '../app/'
   }
 
 
@@ -22,11 +22,15 @@ pipeline {
 
     stage('Run Terraform'){
         steps {
-            // Have to work on this
+            script {
+                cd terraform
+                terraform init -input=false
+                terraform plan -out tfplan
+                terraform appy -input=false -auto-approve tfplan
+              }
         }
     }
 
-  
 
 
     stage('Build image and push') {
@@ -44,7 +48,7 @@ pipeline {
 
   post {
     success {
-      sh "echo Successfully builded docker image and pushed it to the ${ECR_REPOSITORY} ECR!" 
+      sh "echo Successfully created infrastructure, builded docker image and pushed it to the ${ECR_REPOSITORY} ECR!" 
     }
     failure {
       sh "echo Failure!"
