@@ -24,9 +24,9 @@ pipeline {
         steps {
             script {
                 cd terraform
-                terraform init -input=false
+                terraform init
                 terraform plan -out tfplan
-                terraform appy -input=false -auto-approve tfplan
+                terraform appy -auto-approve tfplan
               }
         }
     }
