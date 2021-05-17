@@ -8,13 +8,12 @@ pipeline {
     VERSION = 'latest'
     CREDENTIALS = 'AWS_CREDENTIALS'
     DOCKERFILE_PATH = './app/'
-    GRAFANA_USERNAME="GRAFANA_USERNAME"
-    GRAFANA_PASSWORD="GRAFANA_PASSWORD"
+    GRAFANA_USERNAME = 'GRAFANA_USERNAME'
+    GRAFANA_PASSWORD = 'GRAFANA_PASSWORD'
   }
 
-
   stages {
-    stage('Git cloning'){
+    stage('Git cloning') {
       steps {
         git branch: 'main',
             credentialsId: 'github',
@@ -26,45 +25,20 @@ pipeline {
       steps {
         script {
             docker.build("${ECR_REPOSITORY}", "${DOCKERFILE_PATH}")
-            docker.withRegistry("https://${REGISTRY}", "ecr:${REGION}:${CREDENTIALS}") { 
-            docker.image("${ECR_REPOSITORY}").push("${VERSION}") 
-          }
+            docker.withRegistry("https://${REGISTRY}", "ecr:${REGION}:${CREDENTIALS}") {
+            docker.image("${ECR_REPOSITORY}").push("${VERSION}")
+            }
         }
       }
     }
-
-    stage('Deploy application') {
-      steps {
-        sh "aws eks --region eu-west-2 update-kubeconfig --name terraform-eks-test"
-        sh "kubectl apply -f deployment/test-application.yaml"
-        }
-      }
-      
-    stage('Deploy prometheus') {
-      steps {
-        sh "helm repo add prometheus-community https://prometheus-community.github.io/helm-charts"
-        sh "helm repo update"
-        sh "helm install helm-prometheus prometheus-community/prometheus --values deployment/prometheus-values.yaml"
-     }
-    }
-
-    stage('Deploy grafana') {
-      steps {
-        sh "helm repo add grafana https://grafana.github.io/helm-charts"
-        sh "helm repo update"
-        sh "helm install helm-grafana grafana/grafana --set adminUser=${GRAFANA_USERNAME},adminPassword=${GRAFANA_PASSWORD} --values deployment/grafana-values.yaml"
-      }
-    }
-    }
-
   }
+}
 
-  post {
+post {
     success {
-      sh "echo Successfully created infrastructure, builded docker image and pushed it to the ${ECR_REPOSITORY} ECR!" 
+      sh "echo Successfully created infrastructure, builded docker image and pushed it to the ${ECR_REPOSITORY} ECR!"
     }
     failure {
-      sh "echo Failure!"
+      sh 'echo Failure!'
     }
-  }
-
+}
